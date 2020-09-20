@@ -53,9 +53,9 @@
         return obj;
     }
 
-        .isFunction = function (obj) {
-            return typeof obj == 'function' || false;
-        };
+    _.isFunction = function (obj) {
+        return typeof obj == 'function' || false;
+    };
 
     _.functions = function (obj) {
         var names = [];
@@ -64,17 +64,6 @@
         }
         return names.sort();
     };
-
-    var _ = function (obj) {
-        if (!(this instanceof _)) return new _(obj);
-        this._wrapped = obj;
-    }
-
-    root._ = _;
-
-    _.log = function () {
-        console.log(1)
-    }
 
     // 先获取到_上的方法
     _.functions = function (obj) {
@@ -91,8 +80,8 @@
     }
 
     // 将_上的方法复制到_.prototype
-    _mixin = function (obj) {
-        _each(_.function(obj), function (name) {
+    _.mixin = function (obj) {
+        _.each(_.function(obj), function (name) {
             var func = _[name] = obj[name];
             _.prototype[name] = function () {
                 var args = [this._wrapped];
@@ -100,16 +89,9 @@
                 return func.apply(_, args);
             };
         });
-
-        // 此时_mixin已经具备拓展方法的能力
-        _._mixin({
-            countLength: function (arr) {
-                return arr.length;
-            }
-        })
         return _;
     };
 
-    _mixin(_);
+    _.mixin(_);
 
 })()
