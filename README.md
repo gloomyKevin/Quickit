@@ -37,9 +37,6 @@ For these to work, the player must be in focus.
 -	为项目中的工具函数添加大量使用实例, 并进行了详细的说明, 帮助使用者更快更好地上手
 
 
-Here is an [official demo site](https://vortesnail.github.io/qier-player-demo/) showing the player in use.
-
-
 ## Quick Start
 
 ### Install
