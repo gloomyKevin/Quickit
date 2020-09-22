@@ -79,6 +79,16 @@
         return string.split('').reverse().join('');
     }
 
+    _.chain = function (obj) {
+        var instance = _(obj);
+        instance._chain = true;
+        return instance;
+    };
+
+    var chainResult = function (instance, obj) {
+        return instance._chain ? _(obj).chain() : obj;
+    };
+
     // 将_上的方法复制到_.prototype
     _.mixin = function (obj) {
         _.each(_.function(obj), function (name) {
