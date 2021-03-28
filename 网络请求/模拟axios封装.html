@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function axios({url, method, params, data}) {
+            return new Promise((resolve, reject) => {
+                method = method.toUpperCase()
+                // AJAX四步骤
+                let xhr = new XMLHttpRequest()
+                // 将params缀到url尾部
+                let str = ''
+                for(let k in params) {
+                    str += `${k}=${params[k]}&`
+                }
+                // 去除最后一个&字符
+                str = str.slice(0, -1)
+                console.log(str)
+                //TODO 分清楚模板``与常规字符串拼接的使用场景选取
+                xhr.open(method, `${url}?${str}`)
+                if(method === 'POST' || method === 'PUT' || method === 'DELETE') {
+                    // Content-type mine设置
+                    xhr.setRequestHeader('Content-type', 'application/json')
+                    // 将data对象转换为字符串
+                    xhr.send(JSON.stringify(data))
+                } else {
+                    xhr.send()
+                }
+                xhr.responseType = 'json'
+                // 处理结果
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState === 4) {
+                        if(xhr.status >= 200 && xhr.status < 300) {
+                            resolve({
+                                status: xhr.status,
+                                message: xhr.statusText,
+                                body: xhr.response
+                            })
+                        } else {
+                            reject(new Error('请求失败，错误码为: ' + xhr.status))
+                        }
+                    }
+                }
+            })
+        }
+
+        // 发送get请求
+        axios.get = function(url, option) {
+            let config = Object.assign(option, {method: 'get', url: url})
+            return axios(config)
+        }
+
+        axios.delete = function(url, option) {
+            let config = Object.assign(option, {method: 'delete', url: url})
+            return axios(config)
+        }
+
+        axios.put = function(url, option) {
+            let config = Object.assign(option, {method: 'put', url: url})
+            return axios(config)
+        }
+
+        // 测试
+        axios({
+            url: 'https://v1.jinrishici.com/log',
+            method: 'GET',
+            params: {
+                a: 100,
+                b: 200
+            },
+            data: {
+                c: 300,
+                d: 400
+            }
+        }).then(response => {
+            console.log(response)
+        }).catch(reason => {
+            console.log(reason)
+        })
+
+        axios.get('https://v1.jinrishici.com/log',
+            {
+                params: {
+                    a: 100,
+                    b: 200
+                }
+            }
+        ).then(response => {
+            console.log(response)
+        }).catch(reason => {
+            console.log(reason)
+        })
+
+        axios.delete('https://v1.jinrishici.com/log',
+            {
+                params: {
+                    a: 100,
+                    b: 200
+                }
+            }
+        ).then(response => {
+            console.log(response)
+        }).catch(reason => {
+            console.log(reason)
+        })
+
+        axios.put('https://v1.jinrishici.com/log',
+            {
+                params: {
+                    a: 100,
+                    b: 200
+                }
+            }
+        ).then(response => {
+            console.log(response)
+        }).catch(reason => {
+            console.log(reason)
+        })
+    </script>
+</body>
+</html>
