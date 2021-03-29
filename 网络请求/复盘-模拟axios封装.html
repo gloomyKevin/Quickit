@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Axios(cfg) {
+            this.defaults = cfg
+        }
+        function axios({url, params, method, data}) {
+            return new Promise((resolve, reject) => {
+                method = method.toUpperCase()
+                let xhr = new XMLHttpRequest()
+                let str = ''
+                for(let k in params) {
+                    str += `${k}=${params[k]}&`
+                }
+                str = str.slice(0, -1)
+                console.log(str)
+                // 添加请求头
+                xhr.open(method, url+'?'+str)
+                if(method === 'POST' || method === 'PUT' || method === 'DELETE') {
+                    xhr.setRequestHeader('Content-type', 'application/json')
+                    xhr.send(JSON.stringify(data))
+                } else {
+                    xhr.send()
+                }
+
+                xhr.responseType = 'json'
+                xhr.onreadystatechange = function() {
+                    if(xhr.readyState === 4) {
+                        if(xhr.status >= 200 && xhr.status < 300) {
+                            resolve({
+                                status: xhr.status,
+                                message: xhr.statusText,
+                                body: xhr.response
+                            })
+                        } else {
+                            reject(new Error('请求错误，错误码为: ' + xhr.status))
+                        }
+                    }
+                }
+            })
+        }
+
+        axios.get = function(url, options){
+            let cfg = Object.assign(options, {method: 'GET', url: url})
+            return axios(cfg)
+        }
+
+        axios({
+            url: 'https://v1.jinrishici.com/log',
+            params: {
+                a: 100,
+                b: 200
+            },
+            method: 'GET',
+            data: {
+                c: 300,
+                d: 400
+            }
+        }).then(response => {
+            console.log(response)
+        }).catch(reason => {
+            console.log(reason)
+        })
+
+        axios.get('https://v1.jinrishici.com/log', {
+            method: 'GET',
+            data: {
+                a: 100,
+                b: 100
+            }
+        }).then(response => {
+            console.log(response)
+        }).catch(reason => {
+            console.log(reason)
+        })
+    </script>
+</body>
+</html>
