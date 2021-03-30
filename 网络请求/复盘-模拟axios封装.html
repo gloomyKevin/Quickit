@@ -11,41 +11,80 @@
         function Axios(cfg) {
             this.defaults = cfg
         }
-        function axios({url, params, method, data}) {
-            return new Promise((resolve, reject) => {
+        // function axios({url, params, method, data}) {
+        //     return new Promise((resolve, reject) => {
+        //         method = method.toUpperCase()
+        //         let xhr = new XMLHttpRequest()
+        //         let str = ''
+        //         for(let k in params) {
+        //             str += `${k}=${params[k]}&`
+        //         }
+        //         str = str.slice(0, -1)
+        //         console.log(str)
+        //         // 添加请求头
+        //         xhr.open(method, url+'?'+str)
+        //         if(method === 'POST' || method === 'PUT' || method === 'DELETE') {
+        //             xhr.setRequestHeader('Content-type', 'application/json')
+        //             xhr.send(JSON.stringify(data))
+        //         } else {
+        //             xhr.send()
+        //         }
+
+        //         xhr.responseType = 'json'
+        //         xhr.onreadystatechange = function() {
+        //             if(xhr.readyState === 4) {
+        //                 if(xhr.status >= 200 && xhr.status < 300) {
+        //                     resolve({
+        //                         status: xhr.status,
+        //                         message: xhr.statusText,
+        //                         body: xhr.response
+        //                     })
+        //                 } else {
+        //                     reject(new Error('请求错误，错误码为: ' + xhr.status))
+        //                 }
+        //             }
+        //         }
+        //     })
+        // }
+
+        function fetch(url, {
                 method = method.toUpperCase()
-                let xhr = new XMLHttpRequest()
-                let str = ''
-                for(let k in params) {
-                    str += `${k}=${params[k]}&`
-                }
-                str = str.slice(0, -1)
-                console.log(str)
+                // let xhr = new XMLHttpRequest()
+                // let str = ''
+                // for(let k in params) {
+                //     str += `${k}=${params[k]}&`
+                // }
+                // str = str.slice(0, -1)
+                // console.log(str)
                 // 添加请求头
-                xhr.open(method, url+'?'+str)
+                // xhr.open(method, url+'?'+str)
                 if(method === 'POST' || method === 'PUT' || method === 'DELETE') {
-                    xhr.setRequestHeader('Content-type', 'application/json')
-                    xhr.send(JSON.stringify(data))
+                    headers: {'Content-type', 'application/json'}
+                    // xhr.send(JSON.stringify(data))
                 } else {
-                    xhr.send()
+                    headers: {'Content-type', 'application/x-www-form-urlencoded'}
                 }
 
-                xhr.responseType = 'json'
-                xhr.onreadystatechange = function() {
-                    if(xhr.readyState === 4) {
-                        if(xhr.status >= 200 && xhr.status < 300) {
-                            resolve({
-                                status: xhr.status,
-                                message: xhr.statusText,
-                                body: xhr.response
-                            })
-                        } else {
-                            reject(new Error('请求错误，错误码为: ' + xhr.status))
-                        }
-                    }
+                // xhr.responseType = 'json'
+                // xhr.onreadystatechange = function() {
+                //     if(xhr.readyState === 4) {
+                //         if(xhr.status >= 200 && xhr.status < 300) {
+                //             resolve({
+                //                 status: xhr.status,
+                //                 message: xhr.statusText,
+                //                 body: xhr.response
+                //             })
+                //         } else {
+                //             reject(new Error('请求错误，错误码为: ' + xhr.status))
+                //         }
+                //     }
+                // }
+                if(response.ok) {
+                    resolve(response)
+                } else {
+                    reject(new Error('错误码为:' + response.status))
                 }
-            })
-        }
+        })
 
         axios.get = function(url, options){
             let cfg = Object.assign(options, {method: 'GET', url: url})

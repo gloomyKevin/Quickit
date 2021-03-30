@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //TODO:为什么要用call绑定？
+        function toString(ctx) {
+            return Object.prototype.toString.call(ctx)
+        }
+
+        function isArray(val) {
+            return typeof val === 'string' && toString(val) === '[object Array]'
+        }
+
+        function isObject(val) {
+            return val !== null && typeof val === 'object'
+        }
+
+        function isNumber(val) {
+            return typeof val === 'number'
+        }
+        //测试函数
+        console.log(toString('123'))
+    </script>
+</body>
+</html>

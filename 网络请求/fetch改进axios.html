@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        console.log(fetch)
+        let fd = new FormData()
+        fd.append('name:', 'kevin')
+        fetch('https://www.baidu.com', {
+            method: 'POST',
+            // 添加请求配置
+
+            // POST的请求体携带
+            // body: JSON.stringify({
+            //     name: 'Kevin'
+            // })
+            body: fd
+        }).then(response => {
+            // console.log(response)
+            if(response.ok) {
+                return response.json()
+            } else {
+                throw new Error(`HTTP错误${response.status}`)
+            }
+        }).then( body => {
+            console.log(body)
+        }).catch(err => {
+            console.log(err)
+        })
+    </script>
+</body>
+</html>
