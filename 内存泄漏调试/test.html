@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Main window:
+        const iframe = document.createElement('iframe');
+        iframe.src = 'iframe.html';
+        document.body.appendChild(iframe);
+        iframe.addEventListener('load', function() {
+        const local_variable = iframe.contentWindow;
+        function leakingListener() {
+            // Do something with `local_variable`.
+            if (local_variable) {}
+        }
+        document.body.addEventListener('my-debug-event', leakingListener);
+        document.body.removeChild(iframe);
+        // BUG: forgot to unregister `leakingListener`.
+        });
+    </script>
+</body>
+</html>
