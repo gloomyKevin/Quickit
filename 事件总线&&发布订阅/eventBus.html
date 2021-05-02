@@ -50,7 +50,7 @@
             // 只允许注册一次
             // 两种思路
             // 单例模式 --不太适用
-            // 借助off
+            // TODO借助off
             once(event, listener) {
 
             }
@@ -67,7 +67,7 @@
 
             off(event, listener) {
                 if(!this.hasBind(event)) {
-                    console.warn(`this event: ${} don't exist`)
+                    console.warn(`this event: ${event} don't exist`)
                     return
                 }
 
