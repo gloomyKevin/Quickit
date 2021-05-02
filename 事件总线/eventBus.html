@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         // const eventBus = {}
 
         // eventBus.on = function(type, callback) {
-            
+
         // }
         // // eventBus测试
         // eventBus.on('test1', data => {
@@ -26,11 +28,71 @@
         //     eventBus.emit('test1', 'Kevin')
         // }, 500)
 
-        class Event {
+        class EventEmitter {
             constructor() {
-                this._cache = {}
+                // 养成良好习惯，不向外暴露的内部变量加下划线前缀
+                // this._listeners = {}
+                this._listeners = Object.create(null)
+            }
+
+            on(event, listener) {
+                if (!event || !listener) {
+                    return
+                }
+
+                if (this._listeners) {
+                    this._listeners[event].push(listener)
+                } else {
+                    this._listeners[event] = [listener]
+                }
+            }
+
+            // 只允许注册一次
+            // 两种思路
+            // 单例模式 --不太适用
+            // 借助off
+            once(event, listener) {
+
+            }
+
+            emit(event, ...args) {
+                if (!this.hasBind(event)) {
+                    console.warn(`this event: ${event} don't exist`)
+                    return
+                }
+                [...args].forEach(fn => {
+                    fn.call(arg, ...args)
+                })
+            }
+
+            off(event, listener) {
+                if(!this.hasBind(event)) {
+                    console.warn(`this event: ${} don't exist`)
+                    return
+                }
+
+                // 如果没有添加过listener回调，则删除event
+                if(!this._listeners[event]) {
+                    delete this._listeners[event]
+                }
+                // 如果event存在，则只是删除event下对应传入的listener回调
+                this._listeners[event] = this._listeners[event].filter(item => item !== listener)
+            }
+
+            // 通用单例模式
+            getSingle(fn) {
+                let result
+                return function () {
+                    // 对this.arguments的理解
+                    return result || fn.apply(this.arguments)
+                }
+            }
+
+            hasBind(event) {
+                return this._listeners[event] && this._listeners[event].length
             }
         }
     </script>
 </body>
+
 </html>
